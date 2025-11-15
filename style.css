@@ -27,16 +27,20 @@ body {
 /* Align notebook to right when closed */
 .container:has(.notebook-container:not(.opened)) {
   justify-content: flex-end;
-  padding-right: calc(50vw - 200px);
-  /* Align right edge with opened state right edge */
+  /* Align right edge with opened state right edge (adjusted for larger pages)
+     50vw - half of the opened width (600px) places the closed notebook flush */
+  /* Use max() to avoid negative padding on small viewports; keeps closed notebook flush on wide viewports */
+  padding-right: max(calc(50vw - 600px), 20px);
 }
 
 /* Main Notebook Container - 3D Stage */
 .notebook-container {
-  width: 400px;
-  /* Half width when closed */
-  height: 400px;
-  /* Square/symmetric proportions */
+  width: 600px;
+  /* Closed notebook width (now at least 600px) */
+  min-width: 600px;
+  height: 600px;
+  min-height: 600px;
+  /* Square/symmetric proportions (larger for artwork) */
   position: relative;
   perspective: 2000px;
   transform-style: preserve-3d;
@@ -48,8 +52,8 @@ body {
 
 /* When opened, expand to full width and center */
 .notebook-container.opened {
-  width: 800px;
-  /* Double width when opened */
+  width: 1200px;
+  /* Opened width (double the closed width) */
   margin: 0 auto;
   /* Center when opened */
 }
@@ -110,7 +114,8 @@ body {
   justify-content: center;
   color: #f0f0f0;
   text-align: center;
-  transform-origin: left center;
+  /* Anchor the cover to the right edge of the page so it aligns flush with the page's right side */
+  transform-origin: right center;
   transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: 150;
   box-shadow:
@@ -139,7 +144,8 @@ body {
 .notebook-container.opened .cover {
   opacity: 0;
   pointer-events: none;
-  transform: rotateY(-180deg);
+  /* Rotate away around the right edge when opening */
+  transform: rotateY(180deg);
 }
 
 /* Left Page (Clean paper page when open) */
