@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Georgia', serif;
+  font-family: 'Space Mono', monospace;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
   display: flex;
@@ -18,21 +18,43 @@ body {
 .container {
   position: relative;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 40px);
+}
+
+/* Align notebook to right when closed */
+.container:has(.notebook-container:not(.opened)) {
+  justify-content: flex-end;
+  padding-right: calc(50vw - 200px);
+  /* Align right edge with opened state right edge */
 }
 
 /* Main Notebook Container - 3D Stage */
 .notebook-container {
-  width: 800px;
-  height: 600px;
+  width: 400px;
+  /* Half width when closed */
+  height: 400px;
+  /* Square/symmetric proportions */
   position: relative;
   perspective: 2000px;
   transform-style: preserve-3d;
-  margin: 0 auto;
+  margin: 0;
+  /* Container handles positioning */
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.notebook-container:hover {
+/* When opened, expand to full width and center */
+.notebook-container.opened {
+  width: 800px;
+  /* Double width when opened */
+  margin: 0 auto;
+  /* Center when opened */
+}
+
+.notebook-container:hover:not(.opened) {
   transform: scale(1.02);
 }
 
@@ -72,20 +94,7 @@ body {
   box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
-.notebook-binding::after {
-  content: '';
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2px;
-  height: 80%;
-  background: repeating-linear-gradient(to bottom,
-      transparent 0px,
-      transparent 10px,
-      rgba(255, 255, 255, 0.1) 10px,
-      rgba(255, 255, 255, 0.1) 12px);
-}
+/* Removed notebook binding pseudo-element to eliminate watermarks */
 
 /* Cover Styling */
 .cover {
@@ -110,15 +119,17 @@ body {
 }
 
 .cover-content h1 {
-  font-size: 3rem;
-  font-weight: 300;
-  letter-spacing: 3px;
+  font-family: 'Special Elite', cursive;
+  font-size: 2.5rem;
+  font-weight: 400;
+  letter-spacing: 2px;
   margin-bottom: 10px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .cover-subtitle {
-  font-size: 1.2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
   opacity: 0.8;
   font-style: italic;
   letter-spacing: 1px;
@@ -154,20 +165,7 @@ body {
   opacity: 1;
 }
 
-/* Add binding edge to left page */
-.page-left::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 30px;
-  height: 100%;
-  background: linear-gradient(to right,
-      rgba(0, 0, 0, 0.1) 0%,
-      rgba(0, 0, 0, 0.05) 50%,
-      transparent 100%);
-  border-radius: 8px 0 0 8px;
-}
+/* Removed page binding shadow to eliminate watermarks */
 
 /* Page Stack Container */
 .page-stack {
@@ -260,7 +258,8 @@ body {
 .page-content {
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 0;
+  /* Remove padding so images fill the entire page */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -269,11 +268,11 @@ body {
 }
 
 .page-content img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 3px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Fill the entire page naturally */
+  border-radius: 5px;
   transition: transform 0.3s ease;
 }
 
@@ -339,36 +338,6 @@ body {
   height: 24px;
 }
 
-/* Open Button */
-.open-btn {
-  position: absolute;
-  bottom: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 15px 30px;
-  background: linear-gradient(135deg, #4a5ccc 0%, #5a3d7a 100%);
-  color: #ffffff;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-  opacity: 1;
-}
-
-.open-btn:hover {
-  transform: translateX(-50%) translateY(-3px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
-}
-
-.notebook-container.opened .open-btn {
-  opacity: 0;
-  pointer-events: none;
-}
-
 /* Page Indicator */
 .page-indicator {
   position: absolute;
@@ -389,57 +358,43 @@ body {
   opacity: 1;
 }
 
-/* Paper texture effect */
-.page-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    radial-gradient(circle at 20% 50%, transparent 20%, rgba(255, 255, 255, 0.3) 21%, rgba(255, 255, 255, 0.3) 34%, transparent 35%, transparent),
-    linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
-  background-size: 50px 50px, 50px 50px;
-  pointer-events: none;
-  opacity: 0.3;
-}
+/* Removed paper texture overlay to eliminate watermarks on images */
 
 /* Responsive Design */
 @media (max-width: 900px) {
   .notebook-container {
+    width: 45vw;
+    /* Maintain symmetric square proportions */
+    height: 45vw;
+    max-width: 350px;
+    max-height: 350px;
+  }
+
+  .notebook-container.opened {
     width: 90vw;
-    height: calc(90vw * 0.75);
+    height: 45vw;
+    /* Opened maintains square height, double width */
     max-width: 700px;
-    max-height: 525px;
-  }
-
-  .cover-content h1 {
-    font-size: 2rem;
-  }
-
-  .cover-subtitle {
-    font-size: 1rem;
+    max-height: 350px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
   .notebook-container {
+    width: 50vw;
+    height: 50vw;
+    /* Maintain symmetric square proportions on mobile */
+  }
+
+  .notebook-container.opened {
     width: 95vw;
-    height: calc(95vw * 0.75);
+    height: 47.5vw;
+    /* Opened maintains proportional height */
   }
 
   .cover-content h1 {
-    font-size: 1.5rem;
-    letter-spacing: 2px;
-  }
-
-  .cover-subtitle {
-    font-size: 0.9rem;
-  }
-
-  .page-content {
-    padding: 10px;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
   }
 }
 

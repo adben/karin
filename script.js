@@ -13,7 +13,6 @@ class NotebookController {
   initializeElements() {
     this.notebook = document.getElementById('notebook');
     this.cover = document.getElementById('cover');
-    this.openBtn = document.getElementById('openBtn');
     this.prevBtn = document.getElementById('prevBtn');
     this.nextBtn = document.getElementById('nextBtn');
     this.pageStack = document.getElementById('pageStack');
@@ -29,13 +28,32 @@ class NotebookController {
   }
 
   bindEvents() {
-    // Open notebook
-    this.openBtn.addEventListener('click', () => this.openNotebook());
-    this.cover.addEventListener('click', () => {
-      if (!this.isOpened) this.openNotebook();
+    // Open notebook by clicking cover or anywhere when closed
+    this.notebook.addEventListener('click', (e) => {
+      if (!this.isOpened && !e.target.closest('.nav-controls')) {
+        this.openNotebook();
+        return;
+      }
+
+      // Navigation when opened
+      if (this.isOpened && !this.isAnimating) {
+        const rect = this.notebook.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const centerX = rect.width / 2;
+
+        const isOnControls = e.target.closest('.nav-controls');
+
+        if (!isOnControls) {
+          if (clickX < centerX && this.currentPage > 1) {
+            this.previousPage();
+          } else if (clickX > centerX && this.currentPage < this.totalPages) {
+            this.nextPage();
+          }
+        }
+      }
     });
 
-    // Navigation
+    // Navigation buttons
     this.prevBtn.addEventListener('click', () => this.previousPage());
     this.nextBtn.addEventListener('click', () => this.nextPage());
 
@@ -49,28 +67,6 @@ class NotebookController {
       } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         this.nextPage();
-      }
-    });
-
-    // Click areas for page navigation (left/right sides)
-    this.notebook.addEventListener('click', (e) => {
-      if (!this.isOpened || this.isAnimating) return;
-
-      const rect = this.notebook.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const centerX = rect.width / 2;
-
-      // Only respond to clicks on the page areas, not controls
-      const isOnControls = e.target.closest('.nav-controls') ||
-        e.target.closest('.open-btn') ||
-        e.target.closest('.cover');
-
-      if (!isOnControls) {
-        if (clickX < centerX && this.currentPage > 1) {
-          this.previousPage();
-        } else if (clickX > centerX && this.currentPage < this.totalPages) {
-          this.nextPage();
-        }
       }
     });
   }
@@ -92,7 +88,7 @@ class NotebookController {
     setTimeout(() => {
       this.isAnimating = false;
       this.updateDisplay();
-    }, 1000);
+    }, 800);
   }
 
   initializePageStates() {
@@ -101,7 +97,9 @@ class NotebookController {
       page.style.transform = '';
       page.classList.remove('turned', 'hidden');
     }
-  } nextPage() {
+  }
+
+  nextPage() {
     if (this.isAnimating || this.currentPage >= this.totalPages) return;
 
     this.isAnimating = true;
