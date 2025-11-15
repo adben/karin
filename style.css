@@ -47,7 +47,7 @@ body {
   margin: 0;
   /* Container handles positioning */
   cursor: pointer;
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* When opened, expand to full width and center */
@@ -198,7 +198,7 @@ body {
   height: 100%;
   transform-origin: left center;
   transform-style: preserve-3d;
-  transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: 100;
 }
 
@@ -297,51 +297,13 @@ body {
   filter: contrast(0.8) brightness(1.1);
 }
 
-/* Navigation Controls */
+/* Navigation Controls removed - clicking on page advances pages */
 .nav-controls {
-  position: absolute;
-  bottom: -70px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 20px;
-  opacity: 0;
-  transition: opacity 0.5s ease 1s;
-}
-
-.notebook-container.opened .nav-controls {
-  opacity: 1;
+  display: none !important;
 }
 
 .nav-btn {
-  width: 50px;
-  height: 50px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.nav-btn:hover:not(:disabled) {
-  background: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.nav-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.nav-btn svg {
-  width: 24px;
-  height: 24px;
+  display: none !important;
 }
 
 /* Page Indicator */

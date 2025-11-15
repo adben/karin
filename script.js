@@ -13,8 +13,6 @@ class NotebookController {
   initializeElements() {
     this.notebook = document.getElementById('notebook');
     this.cover = document.getElementById('cover');
-    this.prevBtn = document.getElementById('prevBtn');
-    this.nextBtn = document.getElementById('nextBtn');
     this.pageStack = document.getElementById('pageStack');
     this.leftPage = document.getElementById('leftPage');
     this.currentPageSpan = document.getElementById('currentPage');
@@ -53,9 +51,21 @@ class NotebookController {
       }
     });
 
-    // Navigation buttons
-    this.prevBtn.addEventListener('click', () => this.previousPage());
-    this.nextBtn.addEventListener('click', () => this.nextPage());
+    // Clicking on the right-side pages advances to next page for quicker navigation
+    // We already handle clicks on the notebook container; ensure page faces are clickable
+    for (const page of this.pages) {
+      page.addEventListener('click', (e) => {
+        // Only intercept clicks when the notebook is already opened
+        if (!this.isOpened) return;
+
+        // Make sure clicks don't bubble into other handlers while navigating
+        e.stopPropagation();
+        if (!this.isAnimating) {
+          // Clicking a page goes to the next page
+          this.nextPage();
+        }
+      });
+    }
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -85,10 +95,11 @@ class NotebookController {
     this.initializePageStates();
 
     // Animation complete
+    // Slightly faster open
     setTimeout(() => {
       this.isAnimating = false;
       this.updateDisplay();
-    }, 800);
+    }, 500);
   }
 
   initializePageStates() {
@@ -112,6 +123,7 @@ class NotebookController {
       currentPageElement.classList.add('turning');
 
       // After animation completes
+      // Slightly faster page turn for a more concise feel
       setTimeout(() => {
         currentPageElement.classList.remove('turning');
         currentPageElement.classList.add('turned');
@@ -127,7 +139,7 @@ class NotebookController {
 
         this.isAnimating = false;
         this.updateDisplay();
-      }, 1000);
+      }, 600);
     }
   }
 
@@ -160,7 +172,7 @@ class NotebookController {
             pageToReturn.classList.remove('turning', 'turned');
             this.isAnimating = false;
             this.updateDisplay();
-          }, 1000);
+          }, 600);
         }, 50);
       } else {
         this.isAnimating = false;
@@ -180,8 +192,7 @@ class NotebookController {
     }
 
     // Update navigation buttons
-    this.prevBtn.disabled = (this.currentPage <= 1);
-    this.nextBtn.disabled = (this.currentPage >= this.totalPages);
+    // Buttons removed; navigation is now click/keyboard based
   }
 
   // Method to handle window resize
