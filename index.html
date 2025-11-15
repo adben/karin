@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karin Ronnberg - Digital Sketchbook</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Notebook Container with 3D perspective -->
+    <div class="notebook-container" id="notebook">
+
+      <!-- Notebook Base with Binding -->
+      <div class="notebook-base">
+        <!-- Binding/Spine -->
+        <div class="notebook-binding"></div>
+
+        <!-- Cover (only visible when closed) -->
+        <div class="cover" id="cover">
+          <div class="cover-content">
+            <h1>Karin Ronnberg</h1>
+            <div class="cover-subtitle">Sketchbook</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left Page (white background when open) -->
+      <div class="page-left" id="leftPage">
+        <div class="page-content">
+          <!-- Clean white page -->
+        </div>
+      </div>
+
+      <!-- Right Page Stack (contains all the image pages) -->
+      <div class="page-stack" id="pageStack">
+        <!-- Page 1 -->
+        <div class="page-right" data-page="1">
+          <div class="page-face front">
+            <div class="page-content">
+              <img src="img/1.jpeg" alt="Sketch 1">
+            </div>
+          </div>
+          <div class="page-face back">
+            <div class="page-content back-content"></div>
+          </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page-right" data-page="2">
+          <div class="page-face front">
+            <div class="page-content">
+              <img src="img/2.jpeg" alt="Sketch 2">
+            </div>
+          </div>
+          <div class="page-face back">
+            <div class="page-content back-content"></div>
+          </div>
+        </div>
+
+        <!-- Page 3 -->
+        <div class="page-right" data-page="3">
+          <div class="page-face front">
+            <div class="page-content">
+              <img src="img/3.jpeg" alt="Sketch 3">
+            </div>
+          </div>
+          <div class="page-face back">
+            <div class="page-content back-content"></div>
+          </div>
+        </div>
+
+        <!-- Page 4 -->
+        <div class="page-right" data-page="4">
+          <div class="page-face front">
+            <div class="page-content">
+              <img src="img/4.jpeg" alt="Sketch 4">
+            </div>
+          </div>
+          <div class="page-face back">
+            <div class="page-content back-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="nav-controls">
+        <button class="nav-btn prev-btn" id="prevBtn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <button class="nav-btn next-btn" id="nextBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Open Notebook Button (initially visible) -->
+      <div class="open-btn" id="openBtn">
+        <span>Open Sketchbook</span>
+      </div>
+
+    </div>
+
+    <!-- Page Indicator -->
+    <div class="page-indicator" id="pageIndicator">
+      <span id="currentPage">Cover</span> / <span id="totalPages">4</span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
